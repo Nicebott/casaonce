@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #e8be7d;
+    color: #1b4237;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-6 py-24 md:px-12 lg:px-20 lg:py-32;
+  }
+
+  .text-gradient-warm {
+    @apply bg-gradient-to-r from-sand-600 via-terra-500 to-sand-600 bg-clip-text text-transparent;
+  }
+
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg;
+  }
+}
+
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+  .animation-delay-800 {
+    animation-delay: 800ms;
+  }
+  .animation-delay-1000 {
+    animation-delay: 1000ms;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3efe8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0a88a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a28063;
+}
+
+/* Parallax image container */
+.parallax-container {
+  overflow: hidden;
+  position: relative;
+  contain: layout style;
+}
+
+.parallax-container img {
+  transition: transform 0.3s ease-out;
+}
+
+.parallax-container:hover img {
+  transform: scale(1.05);
+}
+
+/* Hero background image — fixed, no scroll movement */
+.hero-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  will-change: auto;
+}
