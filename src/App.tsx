@@ -77,7 +77,7 @@ function Navbar() {
         transition: 'box-shadow 0.4s ease, border-color 0.4s ease',
       }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative z-50 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <a href="#hero" className="flex items-center gap-2 group">
             <span
@@ -117,40 +117,68 @@ function Navbar() {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-lg transition-colors"
+            className="lg:hidden p-2 rounded-lg relative w-10 h-10 flex items-center justify-center"
             style={{
-              color: scrolled ? 'rgb(120,90,60)' : 'white',
+              color: scrolled || isOpen ? 'rgb(120,90,60)' : 'white',
               transition: 'color 0.3s ease',
             }}
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            <div
+              className={`absolute transition-all duration-300 ease-in-out ${
+                isOpen ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'
+              }`}
+            >
+              <Menu size={24} />
+            </div>
+            <div
+              className={`absolute transition-all duration-300 ease-in-out ${
+                isOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'
+              }`}
+            >
+              <X size={24} />
+            </div>
           </button>
         </div>
       </div>
 
+      {/* Mobile Sidebar Overlay */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-500 ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        className={`fixed inset-0 bg-warm-900/20 backdrop-blur-sm lg:hidden transition-opacity duration-500 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
+        onClick={() => setIsOpen(false)}
+        style={{ zIndex: 40 }}
+      />
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed top-0 right-0 h-screen w-72 bg-white/95 backdrop-blur-md shadow-2xl lg:hidden flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        style={{ zIndex: 45 }}
       >
-        <div className="bg-white/95 border-t border-warm-200/50 px-6 py-4 space-y-1">
-          {navLinks.map((link) => (
+        <div className="pt-24 pb-8 px-6 flex flex-col h-full overflow-y-auto">
+          <div className="flex flex-col space-y-2">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="block py-4 text-warm-800 hover:text-ocean-600 transition-colors text-lg font-medium border-b border-warm-200/50 last:border-0"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+          <div className="mt-auto pt-8">
             <a
-              key={link.href}
-              href={link.href}
+              href="#contacto"
               onClick={() => setIsOpen(false)}
-              className="block py-3 text-warm-700 hover:text-ocean-600 transition-colors text-sm font-medium"
+              className="block w-full py-4 text-center bg-ocean-600 text-white rounded-full text-base font-medium shadow-lg shadow-ocean-600/25 hover:bg-ocean-700 transition-colors"
             >
-              {link.label}
+              Reservar
             </a>
-          ))}
-          <a
-            href="#contacto"
-            onClick={() => setIsOpen(false)}
-            className="block mt-2 py-3 text-center bg-ocean-600 text-white rounded-full text-sm font-medium"
-          >
-            Reservar
-          </a>
+          </div>
         </div>
       </div>
     </nav>
@@ -259,9 +287,8 @@ function Esencia() {
     <section id="esencia" className="bg-warm-50 section-padding">
       <div ref={ref} className="max-w-6xl mx-auto">
         <div
-          className={`text-center mb-20 transition-all duration-700 ${
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`text-center mb-20 transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
         >
           <span className="text-ocean-600 text-sm font-medium tracking-[0.25em] uppercase">
             Nuestra esencia
@@ -282,11 +309,10 @@ function Esencia() {
           {features.map((f, i) => (
             <div
               key={f.title}
-              className={`group text-center p-8 rounded-2xl bg-white border border-warm-200/60 hover:border-sand-300 hover:shadow-xl hover:shadow-sand-100/50 transition-all duration-500 ${
-                isInView
+              className={`group text-center p-8 rounded-2xl bg-white border border-warm-200/60 hover:border-sand-300 hover:shadow-xl hover:shadow-sand-100/50 transition-all duration-500 ${isInView
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-8'
-              }`}
+                }`}
               style={{ transitionDelay: `${(i + 1) * 150}ms` }}
             >
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-ocean-50 text-ocean-600 mb-5 group-hover:bg-ocean-600 group-hover:text-white transition-all duration-300">
@@ -330,14 +356,12 @@ function Apartamentos() {
         {/* Khaleesi */}
         <div
           ref={ref1}
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-24 transition-all duration-700 ${
-            inView1 ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-24 transition-all duration-700 ${inView1 ? 'opacity-100' : 'opacity-0'
+            }`}
         >
           <div
-            className={`parallax-container rounded-2xl overflow-hidden shadow-2xl shadow-warm-200/50 ${
-              inView1 ? 'translate-x-0' : '-translate-x-12'
-            } transition-transform duration-700`}
+            className={`parallax-container rounded-2xl overflow-hidden shadow-2xl shadow-warm-200/50 ${inView1 ? 'translate-x-0' : '-translate-x-12'
+              } transition-transform duration-700`}
           >
             <img
               src="/Khaleesi.jpg"
@@ -347,9 +371,8 @@ function Apartamentos() {
             />
           </div>
           <div
-            className={`${
-              inView1 ? 'translate-x-0' : 'translate-x-12'
-            } transition-transform duration-700 delay-200`}
+            className={`${inView1 ? 'translate-x-0' : 'translate-x-12'
+              } transition-transform duration-700 delay-200`}
           >
             <span className="inline-block px-4 py-1.5 bg-terra-100 text-terra-600 rounded-full text-sm font-medium mb-4">
               Vibrante y con estilo
@@ -372,30 +395,38 @@ function Apartamentos() {
                 </span>
               ))}
             </div>
-            <a
-              href="#contacto"
-              className="group inline-flex items-center gap-2 text-ocean-600 font-medium hover:text-ocean-700 transition-colors"
-            >
-              Mas informacion
-              <ArrowRight
-                size={16}
-                className="group-hover:translate-x-1 transition-transform"
-              />
-            </a>
+            <div className="flex flex-wrap items-center gap-6">
+              <a
+                href="#contacto"
+                className="group inline-flex items-center gap-2 text-ocean-600 font-medium hover:text-ocean-700 transition-colors"
+              >
+                Mas informacion
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </a>
+              <a
+                href="https://es-l.airbnb.com/rooms/1651737436763992552?unique_share_id=1b3adc9c-a5c0-4f1f-800d-17789235bbce&viralityEntryPoint=1&s=76&source_impression_id=p3_1778030745_P3IJqnlljsYzpfM4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 bg-[#FF5A5F] text-white text-sm rounded-full font-medium hover:bg-[#E34C52] transition-colors shadow-sm flex items-center gap-2"
+              >
+                Ver en Airbnb
+              </a>
+            </div>
           </div>
         </div>
 
         {/* Evangeline */}
         <div
           ref={ref2}
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center transition-all duration-700 ${
-            inView2 ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center transition-all duration-700 ${inView2 ? 'opacity-100' : 'opacity-0'
+            }`}
         >
           <div
-            className={`order-2 lg:order-1 ${
-              inView2 ? 'translate-x-0' : '-translate-x-12'
-            } transition-transform duration-700 delay-200`}
+            className={`order-2 lg:order-1 ${inView2 ? 'translate-x-0' : '-translate-x-12'
+              } transition-transform duration-700 delay-200`}
           >
             <span className="inline-block px-4 py-1.5 bg-ocean-100 text-ocean-600 rounded-full text-sm font-medium mb-4">
               Bohemio y tranquilo
@@ -418,21 +449,30 @@ function Apartamentos() {
                 </span>
               ))}
             </div>
-            <a
-              href="#contacto"
-              className="group inline-flex items-center gap-2 text-ocean-600 font-medium hover:text-ocean-700 transition-colors"
-            >
-              Mas informacion
-              <ArrowRight
-                size={16}
-                className="group-hover:translate-x-1 transition-transform"
-              />
-            </a>
+            <div className="flex flex-wrap items-center gap-6">
+              <a
+                href="#contacto"
+                className="group inline-flex items-center gap-2 text-ocean-600 font-medium hover:text-ocean-700 transition-colors"
+              >
+                Mas informacion
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </a>
+              <a
+                href="https://es-l.airbnb.com/rooms/1653339743101847715?unique_share_id=4f6f8aab-a20c-426d-a747-97040bf0c97b&viralityEntryPoint=1&s=76&source_impression_id=p3_1778030745_P3QPcFPOGuWZGM5d"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 bg-[#FF5A5F] text-white text-sm rounded-full font-medium hover:bg-[#E34C52] transition-colors shadow-sm flex items-center gap-2"
+              >
+                Ver en Airbnb
+              </a>
+            </div>
           </div>
           <div
-            className={`parallax-container order-1 lg:order-2 rounded-2xl overflow-hidden shadow-2xl shadow-warm-200/50 ${
-              inView2 ? 'translate-x-0' : 'translate-x-12'
-            } transition-transform duration-700`}
+            className={`parallax-container order-1 lg:order-2 rounded-2xl overflow-hidden shadow-2xl shadow-warm-200/50 ${inView2 ? 'translate-x-0' : 'translate-x-12'
+              } transition-transform duration-700`}
           >
             <img
               src="/Evangeline.webp"
@@ -456,11 +496,10 @@ function About() {
       <div ref={ref} className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div
-            className={`transition-all duration-700 ${
-              isInView
+            className={`transition-all duration-700 ${isInView
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
-            }`}
+              }`}
           >
             <span className="text-ocean-600 text-sm font-medium tracking-[0.25em] uppercase">
               Sobre Casa Once
@@ -495,11 +534,10 @@ function About() {
           </div>
 
           <div
-            className={`grid grid-cols-2 gap-4 transition-all duration-700 delay-200 ${
-              isInView
+            className={`grid grid-cols-2 gap-4 transition-all duration-700 delay-200 ${isInView
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
-            }`}
+              }`}
           >
             <div className="space-y-4">
               <div className="parallax-container rounded-2xl overflow-hidden shadow-lg">
@@ -576,11 +614,10 @@ function Testimonios() {
 
       <div ref={ref} className="max-w-6xl mx-auto relative z-10">
         <div
-          className={`text-center mb-16 transition-all duration-700 ${
-            isInView
+          className={`text-center mb-16 transition-all duration-700 ${isInView
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-8'
-          }`}
+            }`}
         >
           <span className="text-sand-300 text-sm font-medium tracking-[0.25em] uppercase">
             Testimonios
@@ -597,11 +634,10 @@ function Testimonios() {
           {testimonials.map((t, i) => (
             <div
               key={t.name}
-              className={`group p-8 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 hover:border-white/20 transition-all duration-500 ${
-                isInView
+              className={`group p-8 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/15 hover:border-white/20 transition-all duration-500 ${isInView
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-8'
-              }`}
+                }`}
               style={{ transitionDelay: `${(i + 1) * 200}ms` }}
             >
               <Quote size={32} className="text-sand-400/50 mb-4" />
@@ -649,11 +685,10 @@ function CtaBanner() {
 
       <div
         ref={ref}
-        className={`max-w-4xl mx-auto text-center relative z-10 transition-all duration-700 ${
-          isInView
+        className={`max-w-4xl mx-auto text-center relative z-10 transition-all duration-700 ${isInView
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-8'
-        }`}
+          }`}
       >
         <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
           Tu escape en
@@ -725,11 +760,10 @@ function Contacto() {
     <section id="contacto" className="bg-warm-50 section-padding">
       <div ref={ref} className="max-w-6xl mx-auto">
         <div
-          className={`text-center mb-16 transition-all duration-700 ${
-            isInView
+          className={`text-center mb-16 transition-all duration-700 ${isInView
               ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-8'
-          }`}
+            }`}
         >
           <span className="text-ocean-600 text-sm font-medium tracking-[0.25em] uppercase">
             Contacto
@@ -744,11 +778,10 @@ function Contacto() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
           <div
-            className={`lg:col-span-2 space-y-8 transition-all duration-700 delay-200 ${
-              isInView
+            className={`lg:col-span-2 space-y-8 transition-all duration-700 delay-200 ${isInView
                 ? 'opacity-100 translate-x-0'
                 : 'opacity-0 -translate-x-8'
-            }`}
+              }`}
           >
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-ocean-50 flex items-center justify-center flex-shrink-0">
@@ -792,11 +825,10 @@ function Contacto() {
           </div>
 
           <div
-            className={`lg:col-span-3 transition-all duration-700 delay-300 ${
-              isInView
+            className={`lg:col-span-3 transition-all duration-700 delay-300 ${isInView
                 ? 'opacity-100 translate-x-0'
                 : 'opacity-0 translate-x-8'
-            }`}
+              }`}
           >
             <form
               onSubmit={handleSubmit}
@@ -891,12 +923,12 @@ function Contacto() {
               {/* Feedback */}
               {status === 'success' && (
                 <div className="mt-4 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm font-medium">
-                   Mensaje enviado correctamente. ¡Te contactaremos pronto!
+                  Mensaje enviado correctamente. ¡Te contactaremos pronto!
                 </div>
               )}
               {status === 'error' && (
                 <div className="mt-4 px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium">
-                   Hubo un error al enviar. Por favor escríbenos directamente a info@casaonce.es
+                  Hubo un error al enviar. Por favor escríbenos directamente a info@casaonce.es
                 </div>
               )}
 
@@ -924,9 +956,8 @@ function Ubicacion() {
     <section id="ubicacion" className="bg-white section-padding">
       <div ref={ref} className="max-w-6xl mx-auto">
         <div
-          className={`text-center mb-12 transition-all duration-700 ${
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`text-center mb-12 transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
         >
           <span className="text-ocean-600 text-sm font-medium tracking-[0.25em] uppercase">
             Como llegar
@@ -942,9 +973,8 @@ function Ubicacion() {
         </div>
 
         <div
-          className={`transition-all duration-700 delay-300 ${
-            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`transition-all duration-700 delay-300 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
         >
           <div className="rounded-2xl overflow-hidden shadow-2xl shadow-warm-200/50 border border-warm-200/60">
             <iframe
