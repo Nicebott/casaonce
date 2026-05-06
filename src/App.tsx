@@ -53,6 +53,17 @@ function Navbar() {
   const scrollY = useScrollY();
   const scrolled = scrollY > 60;
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   const navLinks = [
     { label: 'Inicio', href: '#hero' },
     { label: 'Esencia', href: '#esencia' },
@@ -79,7 +90,7 @@ function Navbar() {
     >
       <div className="relative z-50 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <a href="#hero" className="flex items-center gap-2 group">
+          <a href="#hero" className={`flex items-center gap-2 group transition-opacity duration-300 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             <span
               className="font-display text-2xl font-semibold tracking-wide"
               style={{
@@ -152,12 +163,12 @@ function Navbar() {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-screen w-72 bg-white/95 backdrop-blur-md shadow-2xl lg:hidden flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+        className={`fixed top-0 right-0 h-[100dvh] w-72 bg-white/95 backdrop-blur-md shadow-2xl lg:hidden flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{ zIndex: 45 }}
       >
-        <div className="pt-24 pb-8 px-6 flex flex-col h-full overflow-y-auto">
+        <div className="pt-24 pb-16 px-6 flex flex-col h-full overflow-y-auto">
           <div className="flex flex-col space-y-2">
             {navLinks.map((link) => (
               <a
